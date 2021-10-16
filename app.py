@@ -14,7 +14,7 @@ def Index():
 def Manga():
     # Pega o ID do Manga passado na url
     mangaId = request.args.get('mangaId')
-
+    print(mangaId)
     # Carrega o manga pela API + ID do Manga / carrega as infos para passar para a info page do Manga
     reqManga = requests.get('https://api.mangadex.org/manga/' + mangaId)
     titulo = reqManga.json()['data']['attributes']['title']['en']
@@ -37,7 +37,11 @@ def Manga():
 @app.route('/mangaCap/')
 def MangaCap():
     # Pega o ID do capitulo manga passado na url
+    mangaId = request.args.get('mangaId')
+    print(mangaId)
     capId = request.args.get('capId')
+
+
 
     # Base url é o url do servidor onde e pego as img, nao pode ser fixo pois o servidor pode ser diferente
     reqBaseUrl = requests.get('https://api.mangadex.org/at-home/server/' + capId)
@@ -46,14 +50,13 @@ def MangaCap():
 
     # '/data/' é a qualidade full do arquivo, para compressado é '/data-saver/'
     baseUrl = baseUrl + '/data/'
-    print(baseUrl)
 
     # Carrega o capitulo do manga pela API + ID do capitulo
     reqCap = requests.get('https://api.mangadex.org/chapter/' + capId)
-    idManga = reqCap.json()['data']['attributes']['hash']
+    hash = reqCap.json()['data']['attributes']['hash']
     capitulos = reqCap.json()['data']['attributes']['data']
 
-    return render_template('mangaCap.html', baseUrl=baseUrl, idManga=idManga, capitulos=capitulos)
+    return render_template('mangaCap.html', baseUrl=baseUrl, mangaId=mangaId, hash=hash, capitulos=capitulos)
 
 
 @app.route('/ping')
