@@ -98,7 +98,10 @@ def MangaCap():
     capitulo = reqCap['data']['attributes']['chapter']
 
     # Estrutura para pegar o capitulo anterior e o proximo para botoes na pagina de leitura, nao consegui pegar o item em x posicao do json
-    reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate').json()
+    reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=' + idioma).json()
+    if not reqMangaCaps['volumes']:
+        reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=en').json()
+
     cap = []
     nextCap = ''
     prevCap = ''
@@ -107,14 +110,12 @@ def MangaCap():
         cap.append(reqMangaCaps['volumes'][volume]['chapters'][item]['id'])
 
     for index in range(len(cap)):
-
         if cap[index] == capId:
             if index + 1 < len(cap):
                 prevCap = (cap[index + 1])
             if index - 1 >= 0:
                 nextCap = (cap[index - 1])
             break
-
     return render_template('mangaCap.html', baseUrl=baseUrl, mangaId=mangaId, hash=hash, paginas=paginas,
                            nextCap=nextCap, prevCap=prevCap)
 
