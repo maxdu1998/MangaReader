@@ -3,8 +3,10 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+idioma = 'pt-br'
 
-@app.route('/home')
+
+@app.route('/')
 def Index():
     # Request para carregar os mangas em uma list e exibir
     mangaId = ['789642f8-ca89-4e4e-8f7b-eee4d17ea08b', 'c52b2ce3-7f95-469c-96b0-479524fb7a1a',
@@ -18,14 +20,12 @@ def Index():
         mangasReqResult.append(reqManga['data'])
 
     for manga in mangasReqResult:
-        print(manga)
         for i in manga['relationships']:
             if i['type'] == 'cover_art':
                 capaId = i['id']
                 reqMangaCapa = requests.get('https://api.mangadex.org/cover/' + capaId)
                 manga["capa"] = reqMangaCapa.json()['data']['attributes']['fileName']
 
-    print(mangasReqResult)
 
     return render_template('index.html', mangasList=mangasReqResult)
 
@@ -63,10 +63,14 @@ def Manga():
             reqMangaCapa = requests.get('https://api.mangadex.org/cover/' + capaId).json()
             capa = reqMangaCapa['data']['attributes']['fileName']
 
+    # Req da lista de capitulos e volumes pelo ID do Manga, 1º pt-br, 2ºen
+    mangaCaps = ''
+    reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=' + idioma).json()
+    mangaCaps = reqMangaCaps
 
-    # Req da lista de capitulos e volumes pelo ID do Manga,
-    reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate')
-    mangaCaps = reqMangaCaps.json()
+    if not mangaCaps['volumes']:
+        reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=en').json()
+        mangaCaps = reqMangaCaps
 
     return render_template('manga.html', mangaId=mangaId, titulo=titulo, sinopse=sinopse, capa=capa,
                            mangaCaps=mangaCaps)
