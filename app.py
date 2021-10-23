@@ -7,8 +7,8 @@ idioma = 'pt-br'
 
 
 @app.route('/')
-def Index():
-    # Request para carregar os mangas em uma list e exibir
+def index():
+    # Criação da list da home page - mais vendidos
     mangaId = ['789642f8-ca89-4e4e-8f7b-eee4d17ea08b', 'c52b2ce3-7f95-469c-96b0-479524fb7a1a',
                '59b36734-f2d6-46d7-97c0-06cfd2380852', '304ceac3-8cdb-4fe7-acf7-2b6ff7a60613',
                'a77742b1-befd-49a4-bff5-1ad4e6b0ef7b', '46e9cae5-4407-4576-9b9e-4c517ae9298e',
@@ -26,14 +26,14 @@ def Index():
                 reqMangaCapa = requests.get('https://api.mangadex.org/cover/' + capaId)
                 manga["capa"] = reqMangaCapa.json()['data']['attributes']['fileName']
 
-
     return render_template('index.html', mangasList=mangasReqResult)
 
 
 @app.route('/pesquisa/')
-def Pesquisa():
+def pesquisa():
     mangaTitulo = request.args.get('titulo')
-    reqPesquisa = requests.get('https://api.mangadex.org/manga?limit=9&title=' + mangaTitulo + '&order[relevance]=desc').json()
+    reqPesquisa = requests.get(
+        'https://api.mangadex.org/manga?limit=9&title=' + mangaTitulo + '&order[relevance]=desc').json()
     resultPesquisa = reqPesquisa['data']
 
     for manga in resultPesquisa:
@@ -47,7 +47,7 @@ def Pesquisa():
 
 
 @app.route('/manga/')
-def Manga():
+def manga():
     # Pega o ID do Manga passado na url
     mangaId = request.args.get('mangaId')
 
@@ -65,11 +65,13 @@ def Manga():
 
     # Req da lista de capitulos e volumes pelo ID do Manga, 1º pt-br, 2ºen
     mangaCaps = ''
-    reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=' + idioma).json()
+    reqMangaCaps = requests.get(
+        'https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=' + idioma).json()
     mangaCaps = reqMangaCaps
 
     if not mangaCaps['volumes']:
-        reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=en').json()
+        reqMangaCaps = requests.get(
+            'https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=en').json()
         mangaCaps = reqMangaCaps
 
     return render_template('manga.html', mangaId=mangaId, titulo=titulo, sinopse=sinopse, capa=capa,
@@ -77,7 +79,7 @@ def Manga():
 
 
 @app.route('/mangaCap/')
-def MangaCap():
+def mangacap():
     # Pega o ID do capitulo manga passado na url
     mangaId = request.args.get('mangaId')
     capId = request.args.get('capId')
@@ -98,9 +100,11 @@ def MangaCap():
     capitulo = reqCap['data']['attributes']['chapter']
 
     # Estrutura para pegar o capitulo anterior e o proximo para botoes na pagina de leitura, nao consegui pegar o item em x posicao do json
-    reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=' + idioma).json()
+    reqMangaCaps = requests.get(
+        'https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=' + idioma).json()
     if not reqMangaCaps['volumes']:
-        reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=en').json()
+        reqMangaCaps = requests.get(
+            'https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=en').json()
 
     cap = []
     nextCap = ''
@@ -121,10 +125,9 @@ def MangaCap():
 
 
 @app.route('/ping')
-def Ping():
+def ping():
     req = requests.get('https://api.mangadex.org/ping').text
     return req
-
 
 
 if __name__ == '__main__':
