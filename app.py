@@ -14,18 +14,34 @@ def Index():
                'a1c7c817-4e59-43b7-9365-09675a149a6f']
     mangasReqResult = []
     for manga in mangaId:
-        reqManga = requests.get('https://api.mangadex.org/manga/' + manga)
-        reqManga = reqManga.json()
-        mangasReqResult.append(reqManga)
+        reqManga = requests.get('https://api.mangadex.org/manga/' + manga).json()
+        mangasReqResult.append(reqManga['data'])
+
+    for manga in mangasReqResult:
+        print(manga)
+        for i in manga['relationships']:
+            if i['type'] == 'cover_art':
+                capaId = i['id']
+                reqMangaCapa = requests.get('https://api.mangadex.org/cover/' + capaId)
+                manga["capa"] = reqMangaCapa.json()['data']['attributes']['fileName']
+
+    print(mangasReqResult)
+
     return render_template('index.html', mangasList=mangasReqResult)
 
 
 @app.route('/pesquisa/')
 def Pesquisa():
     mangaTitulo = request.args.get('titulo')
-    reqPesquisa = requests.get('https://api.mangadex.org/manga?limit=9&title=' + mangaTitulo + '&order[relevance]=desc')
-    resultPesquisa = reqPesquisa.json()
+    reqPesquisa = requests.get('https://api.mangadex.org/manga?limit=9&title=' + mangaTitulo + '&order[relevance]=desc').json()
+    resultPesquisa = reqPesquisa['data']
 
+    for manga in resultPesquisa:
+        for i in manga['relationships']:
+            if i['type'] == 'cover_art':
+                capaId = i['id']
+                reqMangaCapa = requests.get('https://api.mangadex.org/cover/' + capaId)
+                manga["capa"] = reqMangaCapa.json()['data']['attributes']['fileName']
 
     return render_template('pesquisa.html', resultPesquisa=resultPesquisa)
 
@@ -36,14 +52,17 @@ def Manga():
     mangaId = request.args.get('mangaId')
 
     # Carrega o manga pela API + ID do Manga / carrega as infos para passar para a info page do Manga
-    reqManga = requests.get('https://api.mangadex.org/manga/' + mangaId)
-    titulo = reqManga.json()['data']['attributes']['title']['en']
-    sinopse = reqManga.json()['data']['attributes']['description']['en']
-    capaId = reqManga.json()['data']['relationships'][2]['id']
+    reqManga = requests.get('https://api.mangadex.org/manga/' + mangaId).json()
+    titulo = reqManga['data']['attributes']['title']['en']
+    sinopse = reqManga['data']['attributes']['description']['en']
 
     # Req da capa (cover) do Manga
-    reqMangaCapa = requests.get('https://api.mangadex.org/cover/' + capaId)
-    capa = reqMangaCapa.json()['data']['attributes']['fileName']
+    for i in reqManga['data']['relationships']:
+        if i['type'] == 'cover_art':
+            capaId = i['id']
+            reqMangaCapa = requests.get('https://api.mangadex.org/cover/' + capaId).json()
+            capa = reqMangaCapa['data']['attributes']['fileName']
+
 
     # Req da lista de capitulos e volumes pelo ID do Manga,
     reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate')
@@ -60,28 +79,28 @@ def MangaCap():
     capId = request.args.get('capId')
 
     # Base url é o url do servidor onde e pego as img, nao pode ser fixo pois o servidor pode ser diferente
-    reqBaseUrl = requests.get('https://api.mangadex.org/at-home/server/' + capId)
-    baseUrl = reqBaseUrl.json()['baseUrl']
+    reqBaseUrl = requests.get('https://api.mangadex.org/at-home/server/' + capId).json()
+    baseUrl = reqBaseUrl['baseUrl']
     baseUrl.replace('\/', '/')
 
     # '/data/' é a qualidade full do arquivo, para compressado é '/data-saver/'
     baseUrl = baseUrl + '/data/'
 
     # Carrega o capitulo do manga pela API + ID do capitulo
-    reqCap = requests.get('https://api.mangadex.org/chapter/' + capId)
-    hash = reqCap.json()['data']['attributes']['hash']
-    paginas = reqCap.json()['data']['attributes']['data']
-    volume = reqCap.json()['data']['attributes']['volume']
-    capitulo = reqCap.json()['data']['attributes']['chapter']
+    reqCap = requests.get('https://api.mangadex.org/chapter/' + capId).json()
+    hash = reqCap['data']['attributes']['hash']
+    paginas = reqCap['data']['attributes']['data']
+    volume = reqCap['data']['attributes']['volume']
+    capitulo = reqCap['data']['attributes']['chapter']
 
     # Estrutura para pegar o capitulo anterior e o proximo para botoes na pagina de leitura, nao consegui pegar o item em x posicao do json
-    reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate')
+    reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate').json()
     cap = []
     nextCap = ''
     prevCap = ''
 
-    for item in reqMangaCaps.json()['volumes'][volume]['chapters']:
-        cap.append(reqMangaCaps.json()['volumes'][volume]['chapters'][item]['id'])
+    for item in reqMangaCaps['volumes'][volume]['chapters']:
+        cap.append(reqMangaCaps['volumes'][volume]['chapters'][item]['id'])
 
     for index in range(len(cap)):
 
@@ -100,6 +119,7 @@ def MangaCap():
 def Ping():
     req = requests.get('https://api.mangadex.org/ping').text
     return req
+
 
 
 if __name__ == '__main__':
