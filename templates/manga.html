@@ -18,12 +18,12 @@
     </style>
 </head>
 
-<body class="text-center bg-dark">
+<body class="text-center bg-light">
 <div class="p-3 d-flex flex-column" style="">
     <div class="container mb-auto">
         <div class="row">
             <div class="mx-auto col-md-9">
-                <nav class="navbar navbar-expand-md navbar-dark">
+                <nav class="navbar navbar-expand-md navbar-light">
                     <div class="container">
                         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                                 data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent"
@@ -33,7 +33,7 @@
                              id="navbar2SupportedContent">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="/home"><b>Home</b></a>
+                                    <a class="nav-link active " href="/home"><h5><b>Home</b></h5></a>
                                 </li>
                             </ul>
                         </div>
@@ -45,68 +45,58 @@
     <div class="container m-5 mx-auto">
         <div class="row">
             <div class="col-md-6 w-50"><img class="img-fluid d-block" id="capa"
-                                             src="https://uploads.mangadex.org/covers/{{ mangaId }}/{{ capa }}"></div>
+                                            src="https://uploads.mangadex.org/covers/{{ mangaId }}/{{ capa }}"></div>
             <div class="col-md-6 mx-auto">
                 <h1 class="cover-heading"><b>{{ titulo }}</b></h1>
-                <p class="lead">Infos</p>
+                <p class="lead">Sinopse: </p>
                 <p class="lead">{{ sinopse }}</p>
+                <div class="col-md-12 w-50 m-4 mx-auto">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 w-100 text-center">
+                <div class="m-4 mx-auto col-md-6 text-center">
+                    <h1>Capítulos: </h1>
+                    {% for mangaVol in mangaCaps.volumes %}
+                        <div class="dropdown dropright ">
+                        <button class="btn btn-secondary w-100 rounded-0 dropdown-toggle" type="button"
+                                id="dropdownMenuButtonCaps" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                            {{ mangaVol }}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCaps" style="">
+                            {% for cap in mangaCaps.volumes[mangaVol]['chapters'] %}<a class="dropdown-item"
+                                                                                       href="/mangaCap/?mangaId={{ mangaId }}&amp;capId={{ mangaCaps.volumes[mangaVol]['chapters'][cap].id }}"> {{ cap }} </a> {% endfor %}
+                        </div> {% endfor %}
+                    </div>
+                    <div class="col-md-6 mx-auto">
+                        <div class="col-md-12 w-50 m-4 mx-auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mx-auto">
                 <div class="col-md-12 w-50 m-4 mx-auto">
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6 w-100">
-            <div class="m-4 mx-auto col-md-6">
-
-
-                {% for mangaVol in mangaCaps.volumes %}
-                    <div class="dropdown dropright ">
-                    <button class="btn btn-secondary w-100 rounded-0 dropdown-toggle" type="button"
-                            id="dropdownMenuButtonCaps" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                        {{ mangaVol }}
-                    </button>
-
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCaps">
-                        {% for cap in mangaCaps.volumes[mangaVol]['chapters'] %}
-                            <a class="dropdown-item" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ mangaCaps.volumes[mangaVol]['chapters'][cap].id }}"> {{ cap }} </a>
-                        {% endfor %}
-                    </div>
-
-                {% endfor %}
-
-                </div>
-                <div class="col-md-6 mx-auto">
-                    <div class="col-md-12 w-50 m-4 mx-auto">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="py-5">
-    <div class="container">
-        <div></div>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"
         style=""></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"
         style=""></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"
         style=""></script>
 <pingendo onclick="window.open('https://pingendo.com/', '_blank')"
           style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
-    Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png"
-                                            class="d-block"
+    Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block"
                                             alt="Pingendo logo" height="16"></pingendo>
 </body>
 

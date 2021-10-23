@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
 </head>
 
-<body>
-
 <nav class="navbar navbar-expand-md navbar-dark bg-info">
     <div class="container">
         <a class="navbar-brand" href="#"><i class="fa d-inline fa-lg fa-bullseye"></i></a>
@@ -24,13 +22,13 @@
                     <a class="nav-link mx-2" href="/home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link mx-2" href="https://www.crunchyroll.com/pt-br/news"  target="blank">Notícias</a>
+                    <a class="nav-link mx-2" href="https://www.crunchyroll.com/pt-br/news" target="blank">Notícias</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link mx-2" href="/home">Ajuda</a>
                 </li>
             </ul>
-           <form class="form-inline my-2 my-lg-0" action="/pesquisa/?titulo=" method="get">
+            <form class="form-inline my-2 my-lg-0" action="/pesquisa/?titulo=" method="get">
                 <input class="form-control" type="text" name="titulo">
                 <button class="btn btn-link my-2 my-sm-0" type="submit" value="Submit"><i class="fa d-inline fa-lg fa-search text-primary"></i></button>
             </form>
@@ -41,19 +39,19 @@
 </div>
 <div class="py-4 bg-light">
     <div class="container">
-        <div class="row"> {% for mangas in mangasList %}
+        <div class="row"> {% for mangas in resultPesquisa.data %}
             <div class="col-md-4 p-3">
                 <div class="card box-shadow">
-                    <img class="card-img-top" id="capa"
+                    <img class="card-img-top"
                          src="https://uploads.mangadex.org/covers/789642f8-ca89-4e4e-8f7b-eee4d17ea08b/10f7def1-e8b4-47c2-a1a2-f7cf0936bca5.jpg">
                     <div class="card-body">
-                        <p class="card-text text-center h4 " id="titulo">{{ mangas.data.attributes.title['en'] }}</p>
+                        <p class="card-text text-center h4 ">{{ mangas.attributes.title['en'] }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a type="button" class="btn btn-sm btn-outline-secondary" id="link"
-                                   href="/manga/?mangaId={{ mangas.data.id }}"> Ler </a>
+                                   href="/manga/?mangaId={{ mangas.id }}"> Ler </a>
                             </div>
-                            <small class="text-muted">{{ mangas.data.attributes.lastChapter }} Capítulos </small>
+                            <small class="text-muted">{{ mangas.attributes.lastChapter }} Capítulos </small>
                         </div>
                     </div>
                 </div>

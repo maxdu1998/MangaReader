@@ -1,5 +1,4 @@
 import requests
-import json
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -18,8 +17,17 @@ def Index():
         reqManga = requests.get('https://api.mangadex.org/manga/' + manga)
         reqManga = reqManga.json()
         mangasReqResult.append(reqManga)
-    print(reqManga)
     return render_template('index.html', mangasList=mangasReqResult)
+
+
+@app.route('/pesquisa/')
+def Pesquisa():
+    mangaTitulo = request.args.get('titulo')
+    reqPesquisa = requests.get('https://api.mangadex.org/manga?limit=9&title=' + mangaTitulo + '&order[relevance]=desc')
+    resultPesquisa = reqPesquisa.json()
+
+
+    return render_template('pesquisa.html', resultPesquisa=resultPesquisa)
 
 
 @app.route('/manga/')
@@ -40,9 +48,6 @@ def Manga():
     # Req da lista de capitulos e volumes pelo ID do Manga,
     reqMangaCaps = requests.get('https://api.mangadex.org/manga/' + mangaId + '/aggregate')
     mangaCaps = reqMangaCaps.json()
-
-    # Organiza os volumes em ordem crescente
-    # mangaCaps.reverse()
 
     return render_template('manga.html', mangaId=mangaId, titulo=titulo, sinopse=sinopse, capa=capa,
                            mangaCaps=mangaCaps)
@@ -85,7 +90,6 @@ def MangaCap():
                 prevCap = (cap[index + 1])
             if index - 1 >= 0:
                 nextCap = (cap[index - 1])
-            print(nextCap, prevCap)
             break
 
     return render_template('mangaCap.html', baseUrl=baseUrl, mangaId=mangaId, hash=hash, paginas=paginas,
