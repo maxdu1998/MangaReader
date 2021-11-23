@@ -1,6 +1,7 @@
 import requests
 from flask import Flask, render_template, request, redirect
 import json
+import hashlib
 
 app = Flask(__name__)
 
@@ -21,6 +22,7 @@ def saveUser(name, pswd):
     if res > -1:
         return False
     id = len(dicUsers) + 1
+    pswd = hashlib.md5(pswd.encode('utf-8')).hexdigest()
     dicUsers[id] = {'name': name, 'pswd': pswd}
     j = json.dumps(dicUsers)
     arq = open('login.json', mode='w')
@@ -59,15 +61,14 @@ def home():
 @app.route('/login', methods=['POST'])
 def login():  # put application's code here
     user = request.form['user']
-    password = request.form['password']
+    password = hashlib.md5(request.form['password'].encode('utf-8')).hexdigest()
 
     log = getUser(user, password)
     if len(log) <= 0:
-        print('Saiu aqui 1')
         return redirect('/')
+
     if log['name'] == user and log['pswd'] == password:
         return redirect('/home')
-    print('Saiu aqui 2')
     return redirect('/')
 
 
