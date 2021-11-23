@@ -9,7 +9,6 @@ idioma = 'pt-br'
 
 
 def saveUser(name, pswd):
-
     dicUsers = {}
     try:
         arq = open('login.json', mode='r')
@@ -30,6 +29,7 @@ def saveUser(name, pswd):
     arq.close()
     return True
 
+
 def buscaDic(name, dic):
     if len(dic) == 0:
         return -1
@@ -37,6 +37,7 @@ def buscaDic(name, dic):
         if v['name'] == name:
             return int(k)
     return -1
+
 
 def getUser(name, pswd):
     dicUsers = {}
@@ -51,6 +52,16 @@ def getUser(name, pswd):
         return {}
     return dicUsers[str(res)]
 
+
+def getFavMangas(userId):
+    favMangas = []
+    try:
+        arq = open('favoritos.json', mode='r')
+        favMangas = json.load(arq)[str(userId)]
+        print('Carregado')
+    except:
+        print('error')
+    return favMangas
 
 
 @app.route('/')
@@ -94,7 +105,7 @@ def register():  # put application's code here
 @app.route('/home')
 def index():
     # Criação da list da home page - mais vendidos
-    mangaId = ['a1c7c817-4e59-43b7-9365-09675a149a6f']
+    mangaId = getFavMangas("2")
     mangasReqResult = []
     for manga in mangaId:
         reqManga = requests.get('https://api.mangadex.org/manga/' + manga).json()
@@ -213,4 +224,3 @@ def ping():
 
 if __name__ == '__main__':
     app.run()
-
