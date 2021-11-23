@@ -1,19 +1,99 @@
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
+import json
 
 app = Flask(__name__)
 
 idioma = 'pt-br'
 
 
+def saveUser(name, pswd):
+
+    dicUsers = {}
+    try:
+        arq = open('login.json', mode='r')
+        dicUsers = json.load(arq)
+    except:
+        print('error')
+
+    print(type(dicUsers))
+    res = buscaDic(name, dicUsers)
+    if res > -1:
+        return False
+    id = len(dicUsers) + 1
+    dicUsers[id] = {'name': name, 'pswd': pswd}
+    j = json.dumps(dicUsers)
+    arq = open('login.json', mode='w')
+    arq.write(j)
+    arq.close()
+    return True
+
+def buscaDic(name, dic):
+    if len(dic) == 0:
+        return -1
+    for k, v in dic.items():
+        if v['name'] == name:
+            return int(k)
+    return -1
+
+def getUser(name, pswd):
+    dicUsers = {}
+    try:
+        arq = open('login.json', mode='r')
+        dicUsers = json.load(arq)
+        print('Carregado')
+    except:
+        print('error')
+    res = buscaDic(name, dicUsers)
+    if res <= -1:
+        return {}
+    return dicUsers[str(res)]
+
+
+
 @app.route('/')
+def home():
+    return render_template('login.html')
+
+
+@app.route('/login', methods=['POST'])
+def login():  # put application's code here
+    user = request.form['user']
+    password = request.form['password']
+
+    log = getUser(user, password)
+    if len(log) <= 0:
+        print('Saiu aqui 1')
+        return redirect('/')
+    if log['name'] == user and log['pswd'] == password:
+        return redirect('/home')
+    print('Saiu aqui 2')
+    return redirect('/')
+
+
+@app.route('/registration')
+def registration():  # put application's code here
+    return render_template('cadastro.html')
+
+
+@app.route('/registration', methods=['POST'])
+def register():  # put application's code here
+    email = request.form['email']
+    name = request.form['name']
+    password1 = request.form['password1']
+    password2 = request.form['password2']
+
+    save = saveUser(name, password1)
+
+    if not save:  # ja existe esse usuário
+        return redirect('/registration')
+    return redirect('/home')
+
+
+@app.route('/home')
 def index():
     # Criação da list da home page - mais vendidos
-    mangaId = ['789642f8-ca89-4e4e-8f7b-eee4d17ea08b', 'c52b2ce3-7f95-469c-96b0-479524fb7a1a',
-               '59b36734-f2d6-46d7-97c0-06cfd2380852', '304ceac3-8cdb-4fe7-acf7-2b6ff7a60613',
-               'a77742b1-befd-49a4-bff5-1ad4e6b0ef7b', '46e9cae5-4407-4576-9b9e-4c517ae9298e',
-               '4f3bcae4-2d96-4c9d-932c-90181d9c873e', '8f8b7cb0-7109-46e8-b12c-0448a6453dfa',
-               'a1c7c817-4e59-43b7-9365-09675a149a6f']
+    mangaId = ['a1c7c817-4e59-43b7-9365-09675a149a6f']
     mangasReqResult = []
     for manga in mangaId:
         reqManga = requests.get('https://api.mangadex.org/manga/' + manga).json()
@@ -132,3 +212,4 @@ def ping():
 
 if __name__ == '__main__':
     app.run()
+

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="../static/css/estilo.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<!-- Página que está sendo exibida -->
+<body class="bg-cover" style="background-image: url('../static/img/x1.png');">
+<!-- A main do tamanho full da página e contém todos os elementos -->
+<main class="h-full flex justify-center">
+    <!-- Divisória central que contém o conteúdo -->
+    <div class="w-full h-screen flex items-center justify-center relative">
+        <!-- Divisória de fundo -->
+        <div class="w-full h-full bg-black opacity-50"></div>
+        <!-- Conteúdo -->
+        <div class="flex flex-col items-center justify-center py-20 w-full h-screen space-y-20 absolute" id="oi"
+             class="oi">
+            <!-- Título -->
+            <div class="flex space-x-2 text-7xl font-black">
+                <span class="titulo1">GIG</span>
+                <span class="titulo2">ANIME</span>
+            </div>
+            <!-- Formulário -->
+            <form class="flex flex-col items-center justify-start w-6/12 h-full space-y-10" action="/registration"
+                  method="post">
+                <label class="w-full flex flex-col items-center justify-center space-y-5">
+                    <!-- Usuário -->
+
+                    <!-- Nome -->
+                    <div class="w-6/12 flex flex-col items-start justify-center space-y-1">
+                        <!-- <span class="text-white">Senha:</span> -->
+                        <input type="text" name="name"
+                               class="w-full h-10 bg-white opacity-60 rounded focus:outline-none text-sm px-4"
+                               placeholder="Digite seu nome de usuário">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="w-6/12 flex flex-col items-start justify-center space-y-1">
+                        <!-- <span class="text-white">Usuário:</span> -->
+                        <input type="email" name="email"
+                               class="w-full h-10 bg-white opacity-60 rounded focus:outline-none text-sm px-4"
+                               placeholder="Digite seu email">
+                    </div>
+
+                    <!-- Senha -->
+                    <div class="w-6/12 flex flex-col items-start justify-center space-y-1">
+                        <!-- <span class="text-white">Usuário:</span> -->
+                        <input type="password" name="password1"
+                               class="w-full h-10 bg-white opacity-60 rounded focus:outline-none text-sm px-4"
+                               placeholder="Digite sua senha">
+                    </div>
+
+                    <!-- Repetir -->
+                    <div class="w-6/12 flex flex-col items-start justify-center space-y-1">
+                        <!-- <span class="text-white">Usuário:</span> -->
+                        <input type="password" name="password2"
+                               class="w-full h-10 bg-white opacity-60 rounded focus:outline-none text-sm px-4"
+                               placeholder="Repita sua senha">
+                    </div>
+
+                </label>
+
+                ​
+                <div class="flex flex-col items-center justify-center w-6/12 space-y-4">
+                    <!-- Botão de Login -->
+                    <button type="submit"
+                            class="w-1/2 h-10 flex items-center justify-center text-white font-medium rounded shodow-lg focus:outline-none hover:bg-blue-500"
+                            style="background-color: #024A9A">Cadastrar
+                    </button>
+                    <a href="login.html" style="color: #DB5E24;">Voltar</a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</main>
+​
+</body>
+</html>
+

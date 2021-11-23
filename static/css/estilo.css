@@ -1,0 +1,72 @@
+.titulo1 {
+    font-size: 144px;
+    color: #024A9A;
+    text-shadow: 2px 2px 5px #62EFF7;
+
+}
+
+.titulo2 {
+    font-size: 144px;
+    color: #DB5E24;
+    text-shadow: 2px 2px 5px #FBDE83;
+
+}
+
+
+/* star 1 */
+
+position: relative;
+width: 24px;
+height: 24px;
+
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Group */
+
+position: absolute;
+left: 8.33%;
+right: 8.33%;
+top: 8.33%;
+bottom: 12.5%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 8.33%;
+right: 8.33%;
+top: 8.33%;
+bottom: 12.5%;
+
+background: #FF0000;
