@@ -63,6 +63,32 @@ def getFavMangas(userId):
         print('error')
     return favMangas
 
+def addFavMangas(userId, mangaId):
+    favMangas = []
+    dicFavMangas = {}
+    try:
+        arq = open('favoritos.json', mode='r')
+        dicFavMangas = json.load(arq)
+        try:
+          favMangas = dicFavMangas[str(userId)]
+        except:
+          print('error2')
+        arq.close()
+        print('Carregado')
+    except:
+        print('error')
+
+    if not favMangas.__contains__(mangaId):
+        favMangas.append(mangaId)
+    else:
+        favMangas.remove(mangaId)
+    dicFavMangas[str(userId)] = favMangas
+    j = json.dumps(dicFavMangas)
+    arq = open('favoritos.json', mode='w')
+    arq.write(j)
+    arq.close()
+    return favMangas
+
 
 @app.route('/')
 def home():
@@ -141,6 +167,7 @@ def pesquisa():
 @app.route('/manga/')
 def manga():
     # Pega o ID do Manga passado na url
+    userId = 2
     mangaId = request.args.get('mangaId')
 
     # Carrega o manga pela API + ID do Manga / carrega as infos para passar para a info page do Manga
@@ -165,9 +192,9 @@ def manga():
         reqMangaCaps = requests.get(
             'https://api.mangadex.org/manga/' + mangaId + '/aggregate/?translatedLanguage[]=en').json()
         mangaCaps = reqMangaCaps
-
+    c = getFavMangas(userId).__contains__(mangaId)
     return render_template('manga.html', mangaId=mangaId, titulo=titulo, sinopse=sinopse, capa=capa,
-                           mangaCaps=mangaCaps)
+                           mangaCaps=mangaCaps, favorito=c)
 
 
 @app.route('/mangaCap/')
@@ -220,6 +247,13 @@ def mangacap():
 def ping():
     req = requests.get('https://api.mangadex.org/ping').text
     return req
+
+@app.route('/fav', methods=['POST'])
+def fav():
+    j = request.data
+    favorite = json.loads(j)
+    addFavMangas(favorite['userId'], favorite['id'])
+    return '200'
 
 
 if __name__ == '__main__':

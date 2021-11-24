@@ -43,7 +43,11 @@
           <div class="col-md-10" style="">
             <h1 class="cover-heading text-center"><b>{{ titulo }}</b></h1>
           </div>
-          <div class="ml-3" style=""><a class="btn btn-primary" href="#"><i class="fa fa-star fa-fw fa-1x py-1 text-warning"></i></a></div>
+          <div class="ml-3" style="">
+              <a class="btn btn-primary" onclick="Fav('{{ mangaId }}', '2')">
+                  <i id='1' class="fa fa-star fa-fw fa-1x {% if not favorito %}py-1 text-info {% endif %}{% if favorito %}py-1 text-warning {% endif %}"></i>
+              </a>
+          </div>
         </div>
         <p class="lead text-center">Sinopse: </p>
         <p class="lead">{{ sinopse }}</p>
@@ -74,6 +78,35 @@
   </div>
   <div class="row">
   </div>
+  <script>
+      function Fav(id, userId) {
+
+        let link = 'http://127.0.0.1:5000/fav';
+        let metodo = 'post';
+        let json = {"id": id, "userId":userId}
+        console.log("enviando...");
+
+        fetch(link, {
+                method: metodo,
+                body: JSON.stringify(json),
+                headers: {'Content-Type': 'application/json'}
+            }
+        ).then(function(response) {
+            if (response.ok){
+                if(document.getElementById('1').classList.contains('text-info')){
+                    document.getElementById('1').classList.remove('text-info')
+                    document.getElementById('1').classList.add('text-warning')
+                }
+                else{
+                    document.getElementById('1').classList.remove('text-warning')
+                    document.getElementById('1').classList.add('text-info')
+                }
+            }
+        }).catch(function (error) {
+            console.log('Deu ERRO:', error);
+        });
+    }
+  </script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" style=""></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous" style=""></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous" style=""></script>
