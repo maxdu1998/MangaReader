@@ -7,28 +7,9 @@ app = Flask(__name__)
 app.secret_key = 'any random string'
 
 idioma = 'pt-br'
-setCookieUrl = "https://httpbin.org/cookies/set"
-getCookieUrl = "https://httpbin.org/cookies"
-
-def cookies(userId):
-    print(userId , "COOKIES")
-    r = ""
-    s = requests.Session()
-    if userId:
-        ui = {"userId": userId}
-        print(ui , "UI")
-        s.get(setCookieUrl, params=ui)
-        r = s.get(getCookieUrl)
-        print(r.json())
-
-    else:
-        r = s.get(getCookieUrl)
-        print(r.json())
-
-    return r
 
 
-def saveUser(name, pswd):
+def saveUser(email, name, pswd1, pswd2):
     dicUsers = {}
     try:
         arq = open('login.json', mode='r')
@@ -40,9 +21,12 @@ def saveUser(name, pswd):
     res = buscaDic(name, dicUsers)
     if res > -1:
         return False
+    pswd1 = hashlib.md5(pswd1.encode('utf-8')).hexdigest()
+    pswd2 = hashlib.md5(pswd2.encode('utf-8')).hexdigest()
+    if pswd1 != pswd2:
+        return False
     id = len(dicUsers) + 1
-    pswd = hashlib.md5(pswd.encode('utf-8')).hexdigest()
-    dicUsers[id] = {'name': name, 'pswd': pswd}
+    dicUsers[id] = {'email': email, 'name': name, 'pswd': pswd1}
     j = json.dumps(dicUsers)
     arq = open('login.json', mode='w')
     arq.write(j)
@@ -70,7 +54,7 @@ def getUser(name, pswd):
     res = buscaDic(name, dicUsers)
     if res <= -1:
         return {}
-    return {'userId':res, 'name':dicUsers[str(res)]['name'], 'pswd':dicUsers[str(res)]['pswd']}
+    return {'userId': res, 'name': dicUsers[str(res)]['name'], 'pswd': dicUsers[str(res)]['pswd']}
 
 
 def getFavMangas(userId):
@@ -116,19 +100,24 @@ def home():
     return render_template('login.html')
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():  # put application's code here
-    user = request.form['user']
-    password = hashlib.md5(request.form['password'].encode('utf-8')).hexdigest()
+    if request.method == 'POST':
+        user = request.form['user']
+        password = hashlib.md5(request.form['password'].encode('utf-8')).hexdigest()
+        log = getUser(user, password)
+        if len(log) <= 0:
+            return redirect('/')
+        if log['name'] == user and log['pswd'] == password:
+            session['username'] = log["userId"]
+            return redirect('/home')
 
-    log = getUser(user, password)
-    if len(log) <= 0:
-        return redirect('/')
+    return redirect('/')
 
-    if log['name'] == user and log['pswd'] == password:
-        session['username'] = log["userId"]
-        return redirect('/home')
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
     return redirect('/')
 
 
@@ -137,18 +126,21 @@ def registration():  # put application's code here
     return render_template('cadastro.html')
 
 
-@app.route('/registration', methods=['POST'])
+@app.route('/registration', methods=['POST', 'GET'])
 def register():  # put application's code here
-    email = request.form['email']
-    name = request.form['name']
-    password1 = request.form['password1']
-    password2 = request.form['password2']
+    if request.method == 'POST':
+        email = request.form['email']
+        name = request.form['name']
+        password1 = request.form['password1']
+        password2 = request.form['password2']
 
-    save = saveUser(name, password1)
+        save = saveUser(email, name, password1, password2)
 
-    if not save:  # ja existe esse usuário
-        return redirect('/registration')
-    return redirect('/home')
+        if not save:  # ja existe esse usuário
+            return redirect('/registration')
+        return redirect('/home')
+
+    return render_template('cadastro.html')
 
 
 @app.route('/home')
