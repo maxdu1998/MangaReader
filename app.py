@@ -6,6 +6,25 @@ import hashlib
 app = Flask(__name__)
 
 idioma = 'pt-br'
+setCookieUrl = "https://httpbin.org/cookies/set"
+getCookieUrl = "https://httpbin.org/cookies"
+
+def cookies(userId):
+    print(userId , "COOKIES")
+    r = ""
+    s = requests.Session()
+    if userId:
+        ui = {"userId": userId}
+        print(ui , "UI")
+        s.get(setCookieUrl, params=ui)
+        r = s.get(getCookieUrl)
+        print(r.json())
+
+    else:
+        r = s.get(getCookieUrl)
+        print(r.json())
+
+    return r
 
 
 def saveUser(name, pswd):
@@ -50,7 +69,7 @@ def getUser(name, pswd):
     res = buscaDic(name, dicUsers)
     if res <= -1:
         return {}
-    return dicUsers[str(res)]
+    return {'userId':res, 'name':dicUsers[str(res)]['name'], 'pswd':dicUsers[str(res)]['pswd']}
 
 
 def getFavMangas(userId):
@@ -63,6 +82,7 @@ def getFavMangas(userId):
         print('error')
     return favMangas
 
+
 def addFavMangas(userId, mangaId):
     favMangas = []
     dicFavMangas = {}
@@ -70,9 +90,9 @@ def addFavMangas(userId, mangaId):
         arq = open('favoritos.json', mode='r')
         dicFavMangas = json.load(arq)
         try:
-          favMangas = dicFavMangas[str(userId)]
+            favMangas = dicFavMangas[str(userId)]
         except:
-          print('error2')
+            print('error2')
         arq.close()
         print('Carregado')
     except:
@@ -105,7 +125,10 @@ def login():  # put application's code here
         return redirect('/')
 
     if log['name'] == user and log['pswd'] == password:
+        print(log["userId"])
+        cookies(log["userId"])
         return redirect('/home')
+
     return redirect('/')
 
 
@@ -130,8 +153,12 @@ def register():  # put application's code here
 
 @app.route('/home')
 def index():
-    # Criação da list da home page - mais vendidos
-    mangaId = getFavMangas("2")
+    # Criação da list da home page - favoritos
+    c = cookies("")
+    print(c.json())
+    c = c.json()["cookies"]["userId"]
+    print()
+    mangaId = getFavMangas(c)
     mangasReqResult = []
     for manga in mangaId:
         reqManga = requests.get('https://api.mangadex.org/manga/' + manga).json()
@@ -247,6 +274,7 @@ def mangacap():
 def ping():
     req = requests.get('https://api.mangadex.org/ping').text
     return req
+
 
 @app.route('/fav', methods=['POST'])
 def fav():
