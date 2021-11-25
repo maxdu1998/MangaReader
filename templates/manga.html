@@ -2,88 +2,117 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-  <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
-  <style> ul {
-            list-style-type: none;
-        }
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+          type="text/css">
+    <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
+    <style> ul {
+        list-style-type: none;
+    }
 
-        li {
-            list-style-type: none;
-        }
+    li {
+        list-style-type: none;
+    }
     </style>
 </head>
 
-<body >
-  <nav class="navbar navbar-expand-md navbar-dark bg-info">
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-info">
+    <div class="dropdown">
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+    </div>
     <div class="container">
-      <a class="navbar-brand" href="/home"><i class="fa d-inline fa-lg fa-bullseye"></i></a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="">
-        <span class="navbar-toggler-icon"></span></button>
-      <div class="collapse navbar-collapse text-center justify-content-between" id="navbar2SupportedContent">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link mx-2" href="https://www.crunchyroll.com/pt-br/news" target="blank">Notícias</a>
-          </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0" action="/pesquisa/?titulo=" method="get">
-          <input class="form-control" type="text" name="titulo">
-          <button class="btn btn-link my-2 my-sm-0" type="submit" value="Submit"><i class="fa d-inline fa-lg fa-search text-primary"></i></button>
-        </form>
-      </div>
-    </div>
-  </nav>
-  <div class="container m-5 mx-auto">
-    <div class="row">
-      <div class="col-md-6 w-50"><img class="img-fluid d-block" id="capa" src="https://uploads.mangadex.org/covers/{{ mangaId }}/{{ capa }}"></div>
-      <div class="col-md-6 mx-auto">
-        <div class="row">
-          <div class="col-md-10" style="">
-            <h1 class="cover-heading text-center"><b>{{ titulo }}</b></h1>
-          </div>
-          <div class="ml-3" style="">
-              <a class="btn btn-primary" onclick="Fav('{{ mangaId }}', '2')">
-                  <i id='1' class="fa fa-star fa-fw fa-1x {% if not favorito %}py-1 text-info {% endif %}{% if favorito %}py-1 text-warning {% endif %}"></i>
-              </a>
-          </div>
+        <a class="navbar-brand" href="/home"><i class="fa d-inline fa-lg fa-bullseye"></i></a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbar2SupportedContent" aria-controls="navbar2SupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation" style="">
+            <span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse text-center justify-content-between" id="navbar2SupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="https://www.crunchyroll.com/pt-br/news" target="blank">Notícias</a>
+                </li>
+            </ul>
+            <div class="row">
+            </div>
+            <form class="form-inline my-lg-0 text-center" action="/pesquisa/?titulo=?options=" method="get" style="">
+                <input class="form-control" type="text" name="titulo">
+                <button class="btn btn-link my-2 my-sm-0" type="submit" value="Submit"><i
+                        class="fa d-inline fa-lg fa-search text-primary"></i></button>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons"></div>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-primary active">
+                        <input type="radio" name="options" id="option1" value="1" checked=""> EN </label>
+                    <label class="btn btn-primary">
+                        <input type="radio" name="options" id="option2" value="0"> PT </label>
+                </div>
+                <div class=""></div>
+                <a class="btn btn-primary ml-3" href="/logout">Sair</a>
+            </form>
         </div>
-        <p class="lead text-center">Sinopse: </p>
-        <p class="lead">{{ sinopse }}</p>
-        <div class="col-md-12 w-50 m-4 mx-auto">
-        </div>
-      </div>
     </div>
+</nav>
+<div class="container m-5 mx-auto">
     <div class="row">
-      <div class="col-md-6 w-100 text-center">
-        <div class="m-4 mx-auto col-md-6 text-center">
-          <h5><b>Capítulos:</b></h5> {% for mangaVol in mangaCaps.volumes %} <div class="dropdown dropright ">
-            <button class="btn btn-secondary w-100 rounded-0 dropdown-toggle" type="button" id="dropdownMenuButtonCaps" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{ mangaVol }}
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCaps" style=""> {% for cap in mangaCaps.volumes[mangaVol]['chapters'] %}<a class="dropdown-item" href="/mangaCap/?mangaId={{ mangaId }}&amp;capId={{ mangaCaps.volumes[mangaVol]['chapters'][cap].id }}"> {{ cap }} </a> {% endfor %} </div> {% endfor %}
-          </div>
-          <div class="col-md-6 mx-auto">
+        <div class="col-md-6 w-50"><img class="img-fluid d-block" id="capa"
+                                        src="https://uploads.mangadex.org/covers/{{ mangaId }}/{{ capa }}"></div>
+        <div class="col-md-6 mx-auto">
+            <div class="row">
+                <div class="col-md-10" style="">
+                    <h1 class="cover-heading text-center"><b>{{ titulo }}</b></h1>
+                </div>
+                <div class="ml-3" style="">
+                    <a class="btn btn-primary" onclick="Fav('{{ mangaId }}', '2')">
+                        <i id='1'
+                           class="fa fa-star fa-fw fa-1x {% if not favorito %}py-1 text-info {% endif %}{% if favorito %}py-1 text-warning {% endif %}"></i>
+                    </a>
+                </div>
+            </div>
+            <p class="lead text-center">Sinopse: </p>
+            <p class="lead">{{ sinopse }}</p>
             <div class="col-md-12 w-50 m-4 mx-auto">
             </div>
-          </div>
         </div>
-      </div>
-      <div class="col-md-6 mx-auto">
-        <div class="col-md-12 w-50 m-4 mx-auto">
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="row">
-  </div>
-  <script>
-      function Fav(id, userId) {
+    <div class="row">
+        <div class="col-md-6 w-100 text-center">
+            <div class="m-4 mx-auto col-md-6 text-center">
+                <h5><b>Capítulos:</b></h5> {% for mangaVol in mangaCaps.volumes %}
+                <div class="dropdown dropright ">
+                <button class="btn btn-secondary w-100 rounded-0 dropdown-toggle" type="button"
+                        id="dropdownMenuButtonCaps" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ mangaVol }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCaps" style="">
+                    {% for cap in mangaCaps.volumes[mangaVol]['chapters'] %}<a class="dropdown-item"
+                                                                               href="/mangaCap/?mangaId={{ mangaId }}&amp;capId={{ mangaCaps.volumes[mangaVol]['chapters'][cap].id }}"> {{ cap }} </a> {% endfor %}
+                </div> {% endfor %}
+                </div>
+                <div class="col-md-6 mx-auto">
+                    <div class="col-md-12 w-50 m-4 mx-auto">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mx-auto">
+            <div class="col-md-12 w-50 m-4 mx-auto">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+</div>
+<script>
+    function Fav(id, userId) {
 
         let link = 'http://127.0.0.1:5000/fav';
         let metodo = 'post';
-        let json = {"id": id, "userId":userId}
+        let json = {"id": id, "userId": userId}
         console.log("enviando...");
 
         fetch(link, {
@@ -91,13 +120,12 @@
                 body: JSON.stringify(json),
                 headers: {'Content-Type': 'application/json'}
             }
-        ).then(function(response) {
-            if (response.ok){
-                if(document.getElementById('1').classList.contains('text-info')){
+        ).then(function (response) {
+            if (response.ok) {
+                if (document.getElementById('1').classList.contains('text-info')) {
                     document.getElementById('1').classList.remove('text-info')
                     document.getElementById('1').classList.add('text-warning')
-                }
-                else{
+                } else {
                     document.getElementById('1').classList.remove('text-warning')
                     document.getElementById('1').classList.add('text-info')
                 }
@@ -106,11 +134,20 @@
             console.log('Deu ERRO:', error);
         });
     }
-  </script>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" style=""></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous" style=""></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous" style=""></script>
-  <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white"> Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16"></pingendo>
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"
+        style=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"
+        style=""></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"
+        style=""></script>
+<pingendo onclick="window.open('https://pingendo.com/', '_blank')"
+          style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">
+    Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block"
+                                            alt="Pingendo logo" height="16"></pingendo>
 </body>
 
 </html>
