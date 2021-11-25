@@ -1,9 +1,10 @@
 import requests
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, url_for
 import json
 import hashlib
 
 app = Flask(__name__)
+app.secret_key = 'any random string'
 
 idioma = 'pt-br'
 setCookieUrl = "https://httpbin.org/cookies/set"
@@ -125,8 +126,7 @@ def login():  # put application's code here
         return redirect('/')
 
     if log['name'] == user and log['pswd'] == password:
-        print(log["userId"])
-        cookies(log["userId"])
+        session['username'] = log["userId"]
         return redirect('/home')
 
     return redirect('/')
@@ -154,10 +154,13 @@ def register():  # put application's code here
 @app.route('/home')
 def index():
     # Criação da list da home page - favoritos
-    c = cookies("")
-    print(c.json())
-    c = c.json()["cookies"]["userId"]
-    print()
+    c = "-1"
+    if 'username' in session:
+        c = session['username']
+        print(session)
+    else:
+        return redirect('/')
+    print(c)
     mangaId = getFavMangas(c)
     mangasReqResult = []
     for manga in mangaId:
