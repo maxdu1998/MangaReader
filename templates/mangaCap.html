@@ -90,7 +90,8 @@
     function Alerta(url){
         var res = confirm("Deseja traduzir a imagem selecionada?")
         if(res == true){
-         window.open(url);
+            var u = "/translate/?imgLink="+url;
+         window.open(u);
         }
     }
 </script>

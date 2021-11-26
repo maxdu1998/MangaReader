@@ -49,20 +49,22 @@ def overlay_ocr_text(img_path):
             cv2.putText(img=img, text=Traduzir(text), org=(top_left[0], top_left[1] - 10),
                         fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 0), thickness=3)
             # show and save image
-            cv2.imwrite("temp.jpg", img)
-            axarr[1].imshow(img)
+            cv2.imwrite(img_path, img)
+            return img_path
+            # axarr[1].imshow(img)
             # plt.savefig(f'./output/{save_name}_overlay.jpg', bbox_inches='tight')
 
 
-def TranslateOCR():
+def TranslateOCR(imglink):
+    myfile = "./static/img/temp/temp.jpg"
+
+    ## If file exists, delete it ##
     try:
-        urllib.request.urlretrieve(
-            "https://uploads.mangadex.org/data/5aa891f7a942b1e993d4ff107168efc1/g3-0bbad05a0eea27794085c9ceb9a2a34f890517d19765543476b942a6e1abba0a.jpg",
-            "temp.jpg")
+        urllib.request.urlretrieve(imglink, myfile)
         print("Imagem salva! =)")
-        im_1_path = 'temp.jpg'
         # result = recognize_text(im_1_path)
-        overlay_ocr_text(im_1_path)
+        return overlay_ocr_text(myfile)
+
     except:
         erro = sys.exc_info()
         print("Ocorreu um erro:", erro)

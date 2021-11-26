@@ -2,8 +2,11 @@ import requests
 from flask import Flask, render_template, request, redirect, session, url_for
 import json
 import hashlib
-from Methods import saveUser, getUser, getFavMangas, addFavMangas
+import urllib.request
+import os
 import OCR
+from Methods import saveUser, getUser, getFavMangas, addFavMangas
+
 
 app = Flask(__name__)
 app.secret_key = 'any random string'
@@ -192,6 +195,17 @@ def mangacap():
                            nextCap=nextCap, prevCap=prevCap, languageId=languageId)
 
 
+@app.route('/translate/')
+def translate():
+    imglink = request.args.get('imgLink')
+    # imglink = 'https://uploads.mangadex.org/data/8f2f527acba633986898597123264070/E2-3ddedac792ac92d674d97db6b91079a123f8df8e60c0404855d5417ef6574032.jpg'
+    print(imglink)
+    ocr = OCR.TranslateOCR(imglink)
+    render = render_template('translate.html', img=ocr)
+
+    return render
+
+
 @app.route('/ping')
 def ping():
     req = requests.get('https://api.mangadex.org/ping').text
@@ -208,4 +222,3 @@ def fav():
 
 if __name__ == '__main__':
     app.run()
-OCR.TranslateOCR()
