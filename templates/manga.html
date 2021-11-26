@@ -67,7 +67,7 @@
                     <h1 class="cover-heading text-center"><b>{{ titulo }}</b></h1>
                 </div>
                 <div class="ml-3" style="">
-                    <a class="btn btn-primary" onclick="Fav('{{ mangaId }}', '2')">
+                    <a class="btn btn-primary" onclick="Fav('{{ mangaId }}', '{{ languageId }}')">
                         <i id='1'
                            class="fa fa-star fa-fw fa-1x {% if not favorito %}py-1 text-info {% endif %}{% if favorito %}py-1 text-warning {% endif %}"></i>
                     </a>
@@ -90,7 +90,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonCaps" style="">
                     {% for cap in mangaCaps.volumes[mangaVol]['chapters'] %}<a class="dropdown-item"
-                                                                               href="/mangaCap/?mangaId={{ mangaId }}&amp;capId={{ mangaCaps.volumes[mangaVol]['chapters'][cap].id }}"> {{ cap }} </a> {% endfor %}
+                                                                               href="/mangaCap/?mangaId={{ mangaId }}&amp;capId={{ mangaCaps.volumes[mangaVol]['chapters'][cap].id }}&amp;languageId={{ languageId }}"> {{ cap }} </a> {% endfor %}
                 </div> {% endfor %}
                 </div>
                 <div class="col-md-6 mx-auto">
@@ -108,11 +108,11 @@
 <div class="row">
 </div>
 <script>
-    function Fav(id, userId) {
+    function Fav(id, languageId) {
 
         let link = 'http://127.0.0.1:5000/fav';
         let metodo = 'post';
-        let json = {"id": id, "userId": userId}
+        let json = {"id": id, "languageId": languageId}
         console.log("enviando...");
 
         fetch(link, {

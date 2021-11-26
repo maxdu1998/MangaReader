@@ -32,7 +32,7 @@
             </ul>
             <div class="row">
             </div>
-            <form class="form-inline my-lg-0 text-center" action="/pesquisa/?titulo=?options=" method="get" style="">
+            <form class="form-inline my-lg-0 text-center" action="/pesquisa" method="get" style="">
                 <input class="form-control" type="text" name="titulo">
                 <button class="btn btn-link my-2 my-sm-0" type="submit" value="Submit"><i
                         class="fa d-inline fa-lg fa-search text-primary"></i></button>
@@ -54,13 +54,13 @@
         <div class="row" style=""> {% for mangas in mangasList %}
             <div class="col-md-4 p-3">
                 <div class="card box-shadow">
-                    <a href="/manga/?mangaId={{ mangas.id }}">
+                    <a href="/manga/?mangaId={{ mangas[0].id }}&languageId={{ mangas[1] }}">
                         <img class="card-img-top display: block width: auto; height: auto;"
-                             src="https://uploads.mangadex.org/covers/{{ mangas.id }}/{{ mangas.capa }}">
+                             src="https://uploads.mangadex.org/covers/{{ mangas[0].id }}/{{ mangas[0].capa }}">
                     </a>
                     <div class="card-body">
                         <div class="">
-                            <p class="card-text h4 text-center">{{ mangas.attributes.title['en'] }}</p>
+                            <p class="card-text h4 text-center">{{ mangas[0].attributes.title['en'] }}</p>
                         </div>
                     </div>
                 </div>

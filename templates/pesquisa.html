@@ -56,7 +56,7 @@
             {% for mangas in resultPesquisa %}
                 <div class="col-md-4 p-3">
                     <div class="card box-shadow">
-                        <a href="/manga/?mangaId={{ mangas.id }}">
+                        <a href="/manga/?mangaId={{ mangas.id }}&languageId={{ languageId }}">
                             <img class="card-img-top"
                                  src="https://uploads.mangadex.org/covers/{{ mangas.id }}/{{ mangas.capa }}">
                         </a>

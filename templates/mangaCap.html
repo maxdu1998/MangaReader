@@ -32,7 +32,7 @@
                                     <a class="nav-link active " href="/home"><h5><b>Home</b></h5></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="/manga/?mangaId={{ mangaId }}"><h5><b> Retornar ao
+                                    <a class="nav-link active" href="/manga/?mangaId={{ mangaId }}&languageId={{ languageId }}"><h5><b> Retornar ao
                                         Manga </b></h5></a>
                                 </li>
                             </ul>
@@ -44,34 +44,33 @@
         <div class="row">
             <div class="col-md-12">
                 {% if prevCap != '' %}
-                    <a class="btn btn-primary m-4" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ prevCap }}">Capítulo
+                    <a class="btn btn-primary m-4" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ prevCap }}&languageId={{ languageId }}">Capítulo
                         Anterior</a>
                 {% endif %}
                 {% if nextCap != '' %}
-                    <a class="btn btn-primary m-4" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ nextCap }}">Próximo
+                    <a class="btn btn-primary m-4" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ nextCap }}&languageId={{ languageId }}">Próximo
                         Capítulo</a>
                 {% endif %}
             </div>
         </div>
     </div>
     <div class="container mx-auto">
-        {% for capImg in paginas %}
-            <ul>
-                <li><img class="img-fluid d-block mx-auto"
-                         src="{{ baseUrl }}{{ hash }}/{{ capImg }}" ;>
+        <ul>
+            {% for capImg in paginas %}
+                <li><img class="img-fluid d-block mx-auto" src="{{ baseUrl }}{{ hash }}/{{ capImg }}">
                 </li>
-            </ul>
-        {% endfor %}
+            {% endfor %}
+        </ul>
     </div>
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 {% if prevCap != '' %}
-                    <a class="btn btn-primary m-4" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ prevCap }}">Capítulo
+                    <a class="btn btn-primary m-4" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ prevCap }}&languageId={{ languageId }}">Capítulo
                         Anterior</a>
                 {% endif %}
                 {% if nextCap != '' %}
-                    <a class="btn btn-primary m-4" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ nextCap }}">Próximo
+                    <a class="btn btn-primary m-4" href="/mangaCap/?mangaId={{ mangaId }}&capId={{ nextCap }}&languageId={{ languageId }}">Próximo
                         Capítulo</a>
                 {% endif %}
             </div>
