@@ -57,7 +57,7 @@
     <div class="container mx-auto">
         <ul>
             {% for capImg in paginas %}
-                <li><img class="img-fluid d-block mx-auto" src="{{ baseUrl }}{{ hash }}/{{ capImg }}">
+                <li><img ondblclick="Alerta('{{ baseUrl }}{{ hash }}/{{ capImg }}')" class="img-fluid d-block mx-auto" src="{{ baseUrl }}{{ hash }}/{{ capImg }}">
                 </li>
             {% endfor %}
         </ul>
@@ -85,6 +85,15 @@
 
     </div>
 </div>
+
+<script>
+    function Alerta(url){
+        var res = confirm("Deseja traduzir a imagem selecionada?")
+        if(res == true){
+         window.open(url);
+        }
+    }
+</script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"
